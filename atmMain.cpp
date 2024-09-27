@@ -46,6 +46,40 @@ class System{
 
 };
 
+int registerMenu(){
+    int op;
+
+    system("cls");
+
+    cout<<"Menu\n";
+    cout<<"1. Not Register Acc\n";
+    cout<<"2. Open Acc\n";
+    cout<<"-> ";
+
+    cin >> op;
+    return op;
+}
+
+int mainMenu(){
+    int op;
+
+    system("cls");
+
+    cout<<"Menu\n";
+    cout<<"1. ---\n";
+    cout<<"2. ---\n";
+    cout<<"3. ---\n"; 
+    cout<<"4. ---\n";
+    cout<<"5. ---\n";
+    cout<<"6. ---\n"; 
+    cout<<"7. Exit\n";
+    cout<<"Select(1-7)\n ";
+    cout<<"-> ";
+
+    cin >> op;
+    return op;
+}
+
 void System::registerAcc(){
 
 Acc x;
@@ -172,39 +206,6 @@ void System::machineMenu(){
             default:
         }
     }
-}
-
-int registerMenu(){
-    int op;
-
-    system("cls");
-
-    cout<<"Menu\n";
-    cout<<"1. Not Register Acc\n";
-    cout<<"2. Open Acc\n";
-    cout<<"-> ";
-
-    cin >> op;
-    return op;
-}
-int mainMenu(){
-    int op;
-
-    system("cls");
-
-    cout<<"Menu\n";
-    cout<<"1. ---\n";
-    cout<<"2. ---\n";
-    cout<<"3. ---\n"; 
-    cout<<"4. ---\n";
-    cout<<"5. ---\n";
-    cout<<"6. ---\n"; 
-    cout<<"7. Exit\n";
-    cout<<"Select(1-7)\n ";
-    cout<<"-> ";
-
-    cin >> op;
-    return op;
 }
 
 int main(){
