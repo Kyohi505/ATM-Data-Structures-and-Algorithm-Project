@@ -13,7 +13,7 @@ using std::getline;
 struct Acc{
     string name;
     string bday;
-    string contact;
+    string contact;// changed int to strings cuz erros and mas maganda ata kung strings
     string accNum;
     string pinCode;
     double balance;
@@ -28,7 +28,7 @@ struct Node{
 class System{
     private:
         Node* head;
-        //Node* currentUser;
+        //Node* currentUser; 
         int createAccNumber();
         std::set<int> generatedAccNumbers;
     public:
@@ -60,7 +60,7 @@ int registerMenu(){
     return op;
 }
 
-int mainMenu(){
+int mainMenu(){ //options for withdraw, balance inquiry, deposity...etc
     int op;
 
     system("cls");
@@ -232,7 +232,7 @@ string num, pin;
         default:
             cout<<"Invalid input.\n";
             cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');//input error handling para if aksidente ma input anything other than numbers
             system("pause");
         }
     }
