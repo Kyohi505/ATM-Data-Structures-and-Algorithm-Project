@@ -149,12 +149,7 @@ else{
 
 
 void System::showBalance(){
-    if(currentUser->data.balance == 5000){
     cout << "Your balance is: "<<currentUser->data.balance;
-    }
-    else{
-        cout<<"ngek";
-    }
 }
 
 void System::showAcc(string x){
