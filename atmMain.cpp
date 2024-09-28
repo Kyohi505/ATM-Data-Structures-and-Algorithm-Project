@@ -206,20 +206,17 @@ void System::changePin(){
 }
 
 void System::machineMenu(){
-System d;
-
     while(true){
         switch(mainMenu()){
             case 1: 
-                    d.showBalance();
+                    showBalance();
                     system("pause");
                     cout<<"Deposit\n";
-                    d.deposit();
+                    deposit();
                     system("pause");
-                    d.showBalance();
-
-
+                    showBalance();
                     break;
+            
             case 2: break;
             case 3: break;
             case 4: break;
