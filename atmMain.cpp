@@ -3,6 +3,7 @@
 #include <string>
 #include <limits>
 #include <ctime>
+#include <time.h>
 #include <set>
 
 using std::cout;
@@ -13,10 +14,10 @@ using std::getline;
 struct Acc{
     string name;
     string bday;
-    string contact;// changed int to strings cuz erros and mas maganda ata kung strings
+    string contact;
     string accNum;
     string pinCode;
-    double balance;
+    double balance = 5000;
 };
 
 struct Node{
@@ -28,17 +29,17 @@ struct Node{
 class System{
     private:
         Node* head;
-        //Node* currentUser; 
+        Node* currentUser;
         int createAccNumber();
         std::set<int> generatedAccNumbers;
     public:
-        System() : head(NULL){}//currentUser(NULL){}
+        System() : head(NULL), currentUser(NULL){}
         void registerAcc();
         void enterAcc(string n, string p);
         void checkRegister();
         void showBalance();
         int withdraw();
-        void deposit(double x);
+        void deposit();
         void fundTransfer(int x);
         void changePin();
         void showAcc(string x);
@@ -46,27 +47,13 @@ class System{
 
 };
 
-int registerMenu(){
+int mainMenu(){
     int op;
 
     system("cls");
 
     cout<<"Menu\n";
-    cout<<"1. Register Account\n";
-    cout<<"2. Open Acc\n";
-    cout<<"-> ";
-
-    cin >> op;
-    return op;
-}
-
-int mainMenu(){ //options for withdraw, balance inquiry, deposity...etc
-    int op;
-
-    system("cls");
-
-    cout<<"Menu\n";
-    cout<<"1. ---\n";
+    cout<<"1. Deposit\n";
     cout<<"2. ---\n";
     cout<<"3. ---\n"; 
     cout<<"4. ---\n";
@@ -80,22 +67,19 @@ int mainMenu(){ //options for withdraw, balance inquiry, deposity...etc
     return op;
 }
 
-void System::machineMenu(){
 
-    while(true){
+int registerMenu(){
+    int op;
 
-        switch(mainMenu()){
-            case 1:break;
-            case 2:break;
-            case 3:break;
-            case 4:break;
-            case 5:break;
-            case 6:break;
-            case 7:break;
-            default:
-                cout << "Enter Only (1-7)\n";
-        }
-    }
+    system("cls");
+
+    cout<<"Menu\n";
+    cout<<"1. Not Register Acc\n";
+    cout<<"2. Open Acc\n";
+    cout<<"-> ";
+
+    cin >> op;
+    return op;
 }
 
 void System::registerAcc(){
@@ -105,7 +89,7 @@ cout<<"Input name: ";
 cin.ignore();
 getline(cin, x.name);
 
-cout <<"Input Birth Date(MM/DD/YY): "; cin >> x.bday;
+cout <<"Input Birth Date(MM/DD/YYYY): "; cin >> x.bday;
 cout <<"Input Contact Number: "; cin >> x.contact;
 cout <<"Input Pin: "; cin >> x.pinCode;
 x.accNum = std::to_string(createAccNumber());
@@ -133,6 +117,7 @@ showAcc(x.accNum);
 
 int System::createAccNumber(){
     int accNum;
+    srand(time(0));
 
     do{
         accNum = rand() % 90000 + 10000;
@@ -156,7 +141,7 @@ if(p == NULL){
     }
 else{
     cout<<"Account Login Successful";
-    //p = currentUser;
+    currentUser = p;
     showAcc(n);
 }
 
@@ -164,7 +149,12 @@ else{
 
 
 void System::showBalance(){
-
+    if(currentUser->data.balance == 5000){
+    cout << "Your balance is: "<<currentUser->data.balance;
+    }
+    else{
+        cout<<"ngek";
+    }
 }
 
 void System::showAcc(string x){
@@ -197,8 +187,19 @@ int System::withdraw(){
     return 0;
 }
 
-void System::deposit(double x){
+void System::deposit(){
 
+    double amount = 0;
+    cout<<"Enter amount to deposit: \n";
+    cin>>amount;
+
+    if(amount < 0){
+        cout <<"insufficient amount\n";
+    }
+    else{
+    currentUser->data.balance += amount; 
+    
+    }
 }
 
 void System::fundTransfer(int x){
@@ -208,6 +209,33 @@ void System::fundTransfer(int x){
 void System::changePin(){
 
 }
+
+void System::machineMenu(){
+System d;
+
+    while(true){
+        switch(mainMenu()){
+            case 1: 
+                    d.showBalance();
+                    system("pause");
+                    cout<<"Deposit\n";
+                    d.deposit();
+                    system("pause");
+                    d.showBalance();
+
+
+                    break;
+            case 2: break;
+            case 3: break;
+            case 4: break;
+            case 5: break;
+            case 6: break;
+            case 7: break;
+            default:
+            cout << "Enter only (1 - 7)";
+        }
+    }
+} 
 
 int main(){
 
@@ -228,12 +256,13 @@ string num, pin;
             cout<<"Enter Account Number: "; cin >> num;
             cout<<"Enter Pin: "; cin >> pin;
             atm.enterAcc(num, pin);
+            atm.machineMenu();
             break;
 
         default:
             cout<<"Invalid input.\n";
             cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');//input error handling para if aksidente ma input anything other than numbers
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             system("pause");
         }
     }
