@@ -52,7 +52,7 @@ int registerMenu(){
     system("cls");
 
     cout<<"Menu\n";
-    cout<<"1. Not Register Acc\n";
+    cout<<"1. Register Account\n";
     cout<<"2. Open Acc\n";
     cout<<"-> ";
 
