@@ -213,8 +213,8 @@ void System::machineMenu(){
                     system("pause");
                     cout<<"Deposit\n";
                     deposit();
-                    system("pause");
                     showBalance();
+                    system("pause");
                     break;
             
             case 2: break;
