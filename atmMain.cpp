@@ -48,7 +48,7 @@ class System{
 
         void locateAcc(string x);
 
-        void fundTransfer(int x);//not done need filehandling
+        void fundTransfer();//not done need filehandling
 
     public:
         System() : head(NULL), currentUser(NULL){}
@@ -65,9 +65,10 @@ int mainMenu(){
     cout<<"1 - Deposit\n";
     cout<<"2 - Withdraw\n";
     cout<<"3 - Balance Inquiry\n"; 
-    cout<<"4 - Account\n";
-    cout<<"5 - Cancel\n";
-    cout<<"Select(1-5)\n ";
+    cout<<"4 - Fund Transfer\n";
+    cout<<"5 - Account\n";
+    cout<<"6 - Cancel\n";
+    cout<<"Select(1-6)\n ";
     cout<<"-> ";
 
     cin >> op;
@@ -104,13 +105,18 @@ void System::machineMenu(){
                 showBalance();
                 system("pause");
                 break;
-
+            
             case 4:
+                system("cls");
+                fundTransfer();
+                break;
+
+            case 5:
                 system("cls");
                 accMenu();
                 break;
 
-            case 5: 
+            case 6: 
                 system("cls");
                 cout <<"Thank you and Goodbye!\n";
                 system("pause");
@@ -118,7 +124,7 @@ void System::machineMenu(){
                 break;
 
             default:
-                cout << "Pls enter only (1 - 5)\n";
+                cout << "Pls enter only (1 - 6)\n";
                 cin.clear();
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 system("pause");
@@ -351,7 +357,7 @@ int System::initialDeposit(){
     return 0;
 }
 
-void System::fundTransfer(int x){
+void System::fundTransfer(){
 
 }
 
