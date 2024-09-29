@@ -39,16 +39,16 @@ class System{
         void showBalance();
         void withdraw();
         void deposit();
-        void fundTransfer(int x);
+        int initialDeposit();
+        void changeInfo();
+        void changePin();
         void machineMenu();
         void accMenu();
         void showAcc();
 
         void locateAcc(string x);
 
-        int initialDeposit();
-        void changeInfo();
-        void changePin();
+        void fundTransfer(int x);//not done need filehandling
 
     public:
         System() : head(NULL), currentUser(NULL){}
