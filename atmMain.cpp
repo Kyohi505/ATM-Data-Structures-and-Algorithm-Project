@@ -40,14 +40,15 @@ class System{
         void withdraw();
         void deposit();
         void fundTransfer(int x);
-        void changePin();
         void machineMenu();
         void accMenu();
-    
         void showAcc();
+
         void locateAcc(string x);
 
         int initialDeposit();
+        void changeInfo();
+        void changePin();
 
     public:
         System() : head(NULL), currentUser(NULL){}
@@ -78,46 +79,49 @@ void System::machineMenu(){
     while(true){
         switch(mainMenu()){
             case 1: 
-                    system("cls");
-                    showBalance();
-                    system("pause");
-                    system("cls");
-                    cout<<"Deposit\n";
-                    deposit();
-                    showBalance();
-                    system("pause");
-                    break;
+                system("cls");
+                showBalance();
+                system("pause");
+                system("cls");
+                cout<<"Deposit\n";
+                deposit();
+                showBalance();
+                system("pause");
+                break;
 
             case 2: 
-                    system("cls");
-                    cout << "Withdraw\n";
-                    withdraw();
-                    system("pause");
-                    system("cls");
-                    showBalance();
-                    system("pause");
-                    break;
+                system("cls");
+                cout << "Withdraw\n";
+                withdraw();
+                system("pause");
+                system("cls");
+                showBalance();
+                system("pause");
+                break;
 
             case 3: 
-                    system("cls");
-                    showBalance();
-                    system("pause");
-                    break;
+                system("cls");
+                showBalance();
+                system("pause");
+                break;
 
-            case 4: break;
+            case 4:
+                system("cls");
+                accMenu();
+                break;
 
             case 5: 
-                    system("cls");
-                    cout <<"Thank you and Goodbye!\n";
-                    system("pause");
-                    return;
-                    break;
+                system("cls");
+                cout <<"Thank you and Goodbye!\n";
+                system("pause");
+                return;
+                break;
 
             default:
-                    cout << "Pls enter only (1 - 5)";
-                    cin.clear();
-                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    system("pause");
+                cout << "Pls enter only (1 - 5)";
+                cin.clear();
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                system("pause");
                 }
         }
 } 
@@ -147,6 +151,8 @@ void System::accMenu(){
                 break;
                 
             case 2:
+                changeInfo();
+                break;
 
             case 3:
 
@@ -349,6 +355,81 @@ void System::fundTransfer(int x){
 
 void System::changePin(){
 
+}
+
+void System::checkRegister(){
+    
+}
+
+void System::changeInfo(){
+int op;
+string newInfo;
+
+    while(true){
+        system("cls");
+
+        cout << "Update Information\n";
+        cout << "1 - Name\n";
+        cout << "2 - Birthdate\n";
+        cout << "3 - Contact Number\n";
+        cout << "4 - Exit\n";
+        cout << "-> ";
+        cin >> op;
+
+        cin.clear();
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        switch(op){
+
+            case 1:
+                system("cls");
+                cout << "Update Current Name(Input 'q' to cancel)\n";
+                cout << currentUser->data.name << '\n';
+                cout << "-> ";
+                cin >> newInfo;
+                if(newInfo == "q"){
+                    return;
+                }
+                currentUser->data.name = newInfo;
+                system("cls");
+                cout << "Updated name: " << currentUser->data.name;
+                break;
+
+            case 2:
+                cout << "Update Current Birthdate(Input 'q' to cancel)\n";
+                cout << currentUser->data.bday << '\n';
+                cout << "-> ";
+                cin >> newInfo;
+                if(newInfo == "q"){
+                    return;
+                }
+                currentUser->data.bday = newInfo;
+                system("cls");
+                cout << "Updated Birthdate: " << currentUser->data.bday;
+                break;
+
+            case 3:
+                cout << "Update Current Contact Number(Input 'q' to cancel)\n";
+                cout << currentUser->data.contact << '\n';
+                cout << "-> ";
+                cin >> newInfo;
+                if(newInfo == "q"){
+                    return;
+                }
+                currentUser->data.contact = newInfo;
+                system("cls");
+                cout << "Updated Birthdate: " << currentUser->data.contact;
+                break;
+
+            case 4:
+                return;
+            
+            default:
+                cout<<"Enter only (1-4)";
+                system("pause");
+        }
+        
+    }
 }
 
 int registerMenu(){
