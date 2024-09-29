@@ -118,7 +118,7 @@ void System::machineMenu(){
                 break;
 
             default:
-                cout << "Pls enter only (1 - 5)";
+                cout << "Pls enter only (1 - 5)\n";
                 cin.clear();
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 system("pause");
@@ -155,6 +155,8 @@ void System::accMenu(){
                 break;
 
             case 3:
+                changePin();
+                break;
 
             case 4:
                 return;
@@ -430,6 +432,57 @@ string newInfo;
         }
         
     }
+}
+
+void System::changePin(){
+    string oldPin, newPin;
+    
+    do{
+    system("cls");
+    cout << "Enter Current Password\n";
+    cout << "(Input 'q' to cancel)\n";
+    cout <<"-> ";
+    cin >> oldPin;
+
+    if(oldPin == "q"){
+        return;
+    }
+
+    if(oldPin != currentUser->data.pinCode){
+        cout<<"Incorrect Pin\n";
+        system("pause");
+    }
+    
+    else{
+        system("cls");
+        cout <<"Enter New Pin\n";
+        cout << "(Input 'q' to cancel)\n";
+        cout <<"-> ";
+        cin >> newPin;
+        
+        if(newPin == "q"){
+            return;
+        }
+        else if(newPin == currentUser->data.pinCode){
+            cout <<"That is already your pin\n";
+            system("pause");
+            return;
+        }
+        else{
+        currentUser->data.pinCode = newPin;
+        cout << "Pin Successfully Changed!\n";
+
+        system("pause");
+        system("cls");
+
+        cout << "This is your current Pin: " << currentUser->data.pinCode << '\n';
+        cout << "Do not share to others!!\n";
+        system("pause");
+        return;
+        }
+    }
+    }while(oldPin != "q" || newPin != "q");
+
 }
 
 int registerMenu(){
