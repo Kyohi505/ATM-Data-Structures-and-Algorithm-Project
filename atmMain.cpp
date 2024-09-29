@@ -38,7 +38,7 @@ class System{
         void enterAcc(string n, string p);
         void checkRegister();
         void showBalance();
-        int withdraw();
+        void withdraw();
         void deposit();
         void fundTransfer(int x);
         void changePin();
@@ -54,13 +54,11 @@ int mainMenu(){
 
     cout<<"Menu\n";
     cout<<"1. Deposit\n";
-    cout<<"2. ---\n";
-    cout<<"3. ---\n"; 
-    cout<<"4. ---\n";
-    cout<<"5. ---\n";
-    cout<<"6. ---\n"; 
-    cout<<"7. Exit\n";
-    cout<<"Select(1-7)\n ";
+    cout<<"2. Withdraw\n";
+    cout<<"3. Balance Inquiry\n"; 
+    cout<<"4. Account\n";
+    cout<<"5. Cancel\n";
+    cout<<"Select(1-5)\n ";
     cout<<"-> ";
 
     cin >> op;
@@ -149,7 +147,7 @@ else{
 
 
 void System::showBalance(){
-    cout << "Your balance is: "<<currentUser->data.balance;
+    cout << "Your current balance is: "<<currentUser->data.balance;
 }
 
 void System::showAcc(string x){
@@ -178,8 +176,20 @@ else{
 
 }
 
-int System::withdraw(){
-    return 0;
+void System::withdraw(){
+
+    double amount = 0;
+    cout<<"Enter amount to withdraw: \n";
+    cin>>amount;
+
+    if(amount > currentUser->data.balance || amount <= 0){
+        cout<<"Invalid amount\n";
+        return;
+    }
+    else{
+        currentUser->data.balance -= amount;
+        cout << "You have successfully withdrawn: " << amount << '\n';
+    }
 }
 
 void System::deposit(){
@@ -188,12 +198,12 @@ void System::deposit(){
     cout<<"Enter amount to deposit: \n";
     cin>>amount;
 
-    if(amount < 0){
-        cout <<"insufficient amount\n";
+    if(amount <= 0){
+        cout <<"invalid amount\n";
+        return;
     }
     else{
-    currentUser->data.balance += amount; 
-    
+    currentUser->data.balance += amount;
     }
 }
 
@@ -206,25 +216,48 @@ void System::changePin(){
 }
 
 void System::machineMenu(){
+
     while(true){
         switch(mainMenu()){
             case 1: 
+                    system("cls");
                     showBalance();
                     system("pause");
+                    system("cls");
                     cout<<"Deposit\n";
                     deposit();
                     showBalance();
                     system("pause");
                     break;
-            
-            case 2: break;
-            case 3: break;
+
+            case 2: 
+                    system("cls");
+                    cout << "Withdraw\n";
+                    withdraw();
+                    system("pause");
+                    system("cls");
+                    showBalance();
+                    system("pause");
+                    break;
+
+            case 3: 
+                    system("cls");
+                    showBalance();
+                    system("pause");
+                    break;
+
             case 4: break;
-            case 5: break;
-            case 6: break;
-            case 7: break;
+
+            case 5: 
+                    cout <<"Thank you and Goodbye!";
+                    exit(0);
+                    break;
+
             default:
-            cout << "Enter only (1 - 7)";
+            cout << "Pls enter only (1 - 5)";
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            system("pause");
         }
     }
 } 
