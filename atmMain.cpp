@@ -265,12 +265,12 @@ void System::machineMenu(){
                     break;
 
             default:
-            cout << "Pls enter only (1 - 5)";
-            cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            system("pause");
+                    cout << "Pls enter only (1 - 5)";
+                    cin.clear();
+                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    system("pause");
+                }
         }
-    }
 } 
 
 int main(){
