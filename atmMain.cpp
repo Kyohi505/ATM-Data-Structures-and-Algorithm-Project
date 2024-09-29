@@ -128,7 +128,7 @@ int System::createAccNumber(){
 void System::enterAcc(string n, string pin){
 Node* p, *q;
 p = q = head;
-while(p != NULL && n != p->data.accNum && pin !=p->data.pinCode){
+while(p != NULL && n != p->data.accNum){
         q = p;
         p = p->next;
     }
@@ -138,7 +138,7 @@ if(p == NULL){
     system("pause");
     return;
     }
-else if(n == p->data.accNum && pin != p->data.pinCode || n != p->data.accNum && pin == p->data.pinCode){
+else if(p->data.pinCode != pin){
     cout << "Unsuccessful. PLS TRY AGAIN\n";
     system("pause");
     return;
