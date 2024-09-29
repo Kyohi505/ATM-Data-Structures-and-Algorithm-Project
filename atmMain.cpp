@@ -72,8 +72,8 @@ int registerMenu(){
     system("cls");
 
     cout<<"Menu\n";
-    cout<<"1. Not Register Acc\n";
-    cout<<"2. Open Acc\n";
+    cout<<"1. Register Account\n";
+    cout<<"2. Open Account\n";
     cout<<"-> ";
 
     cin >> op;
@@ -133,18 +133,19 @@ while(p != NULL && n != p->data.accNum && pin !=p->data.pinCode){
         p = p->next;
     }
 
-if(p == NULL){
-    cout << "Unsuccessful. PLS TRY AGAIN";
+if(p == NULL || n != p->data.accNum || pin !=p->data.pinCode){
+    cout << "Unsuccessful. PLS TRY AGAIN\n";
+    system("pause");
     return;
     }
 else{
     cout<<"Account Login Successful";
     currentUser = p;
     showAcc(n);
-}
+    machineMenu();
+    }
 
 }
-
 
 void System::showBalance(){
     cout << "Your current balance is: "<<currentUser->data.balance << '\n';
@@ -281,7 +282,6 @@ string num, pin;
             cout<<"Enter Account Number: "; cin >> num;
             cout<<"Enter Pin: "; cin >> pin;
             atm.enterAcc(num, pin);
-            atm.machineMenu();
             break;
 
         default:
