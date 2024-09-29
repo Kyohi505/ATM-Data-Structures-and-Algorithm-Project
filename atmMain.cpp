@@ -27,15 +27,12 @@ struct Node{
 };
 
 class System{
+
     private:
         Node* head;
         Node* currentUser;
         int createAccNumber();
         std::set<int> generatedAccNumbers;
-    public:
-        System() : head(NULL), currentUser(NULL){}
-        void registerAcc();
-        void enterAcc(string n, string p);
         void checkRegister();
         void showBalance();
         void withdraw();
@@ -45,6 +42,10 @@ class System{
         void showAcc(string x);
         void machineMenu();
 
+    public:
+        System() : head(NULL), currentUser(NULL){}
+        void registerAcc();
+        void enterAcc(string n, string p);
 };
 
 int mainMenu(){
