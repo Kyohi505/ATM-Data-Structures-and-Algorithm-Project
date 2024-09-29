@@ -17,7 +17,7 @@ struct Acc{
     string contact;
     string accNum;
     string pinCode;
-    double balance = 5000;
+    double balance;
 };
 
 struct Node{
@@ -43,9 +43,11 @@ class System{
         void changePin();
         void machineMenu();
         void accMenu();
-
+    
         void showAcc();
         void locateAcc(string x);
+
+        int initialDeposit();
 
     public:
         System() : head(NULL), currentUser(NULL){}
@@ -172,6 +174,15 @@ cout <<"Input Contact Number: "; cin >> x.contact;
 cout <<"Input Pin: "; cin >> x.pinCode;
 x.accNum = std::to_string(createAccNumber());
 
+double deposit = initialDeposit();
+
+if(deposit == -1){
+    cout << "Unsuccessful Registration\n";
+    system("pause");
+    return;
+}
+x.balance = deposit;
+    
 Node* p, *q, *newNode;
 p = q = head;
 
@@ -189,7 +200,11 @@ else{
     newNode->next = p;
     }
 
-showAcc(x.accNum);
+cout << "Successful Registration!\n";
+cout << "Your Account Number is: " << newNode->data.accNum << '\n';
+system("pause");
+
+locateAcc(x.accNum);
 }
 
 int System::createAccNumber(){
@@ -301,6 +316,33 @@ void System::deposit(){
     }
 }
 
+int System::initialDeposit(){
+    double amount = 0;
+    do{
+        cout <<"Initial Deposit for Account Registration (Min. 5000)\n";
+        cout <<"(Enter '1' to cancel)\n";
+        cout <<"-> ";
+        cin >> amount;
+        
+        if(amount == 1){
+            return -1;
+        }
+        else if(amount < 5000){
+        cout <<"You must deposit minimum of 5000!\n";
+        system("pause");
+        system("cls");
+        }
+    }while(amount < 5000);
+    
+    if(amount >= 5000){
+        cout << "Successful Deposit!\n";
+        system("pause");
+        system("cls");
+        return amount;
+    }
+    return 0;
+}
+
 void System::fundTransfer(int x){
 
 }
@@ -334,9 +376,6 @@ string num, pin;
         case 1:
             system("cls");
             atm.registerAcc();
-            system("cls");
-            cout << "Successful Account Registration\n";
-            system("pause");
             break;
 
         case 2:
