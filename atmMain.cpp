@@ -2,8 +2,8 @@
 #include <fstream>
 #include <string>
 #include <limits>
+#include <cstdlib>
 #include <ctime>
-#include <time.h>
 #include <set>
 
 using std::cout;
