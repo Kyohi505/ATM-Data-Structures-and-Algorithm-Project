@@ -258,8 +258,10 @@ void System::machineMenu(){
             case 4: break;
 
             case 5: 
-                    cout <<"Thank you and Goodbye!";
-                    exit(0);
+                    system("cls");
+                    cout <<"Thank you and Goodbye!\n";
+                    system("pause");
+                    return;
                     break;
 
             default:
