@@ -423,7 +423,9 @@ string newInfo;
                 return;
             
             default:
-                cout<<"Enter only (1-4)";
+                cout<<"Enter only (1-4)\n";
+                cin.clear();
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 system("pause");
         }
         
