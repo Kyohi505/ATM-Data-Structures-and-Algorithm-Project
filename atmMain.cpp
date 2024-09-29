@@ -355,10 +355,6 @@ void System::fundTransfer(int x){
 
 }
 
-void System::changePin(){
-
-}
-
 void System::checkRegister(){
     
 }
