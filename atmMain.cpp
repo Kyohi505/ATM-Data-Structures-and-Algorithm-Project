@@ -147,7 +147,7 @@ else{
 
 
 void System::showBalance(){
-    cout << "Your current balance is: "<<currentUser->data.balance;
+    cout << "Your current balance is: "<<currentUser->data.balance << '\n';
 }
 
 void System::showAcc(string x){
