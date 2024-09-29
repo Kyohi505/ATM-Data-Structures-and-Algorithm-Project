@@ -62,11 +62,11 @@ int mainMenu(){
     system("cls");
 
     cout<<"Menu\n";
-    cout<<"1. Deposit\n";
-    cout<<"2. Withdraw\n";
-    cout<<"3. Balance Inquiry\n"; 
-    cout<<"4. Account\n";
-    cout<<"5. Cancel\n";
+    cout<<"1 - Deposit\n";
+    cout<<"2 - Withdraw\n";
+    cout<<"3 - Balance Inquiry\n"; 
+    cout<<"4 - Account\n";
+    cout<<"5 - Cancel\n";
     cout<<"Select(1-5)\n ";
     cout<<"-> ";
 
@@ -132,10 +132,10 @@ int infoMenu(){
     system("cls");
 
     cout<<"------------------\n";
-    cout<<"1.Account Details\n";
-    cout<<"2.Change Account Information\n";
-    cout<<"3.Change Pin\n";
-    cout<<"4.Cancel\n";
+    cout<<"1 - Account Details\n";
+    cout<<"2 - Change Account Information\n";
+    cout<<"3 - Change Pin\n";
+    cout<<"4 - Cancel\n";
     cout<<"-> ";
 
     cin >> op;
@@ -487,9 +487,9 @@ int registerMenu(){
     system("cls");
 
     cout<<"Menu\n";
-    cout<<"1. Register Account\n";
-    cout<<"2. Open Account\n";
-    cout<<"3. Exit\n";
+    cout<<"1 - Register Account\n";
+    cout<<"2 - Enter Account\n";
+    cout<<"3 - Exit\n";
     cout<<"-> ";
 
     cin >> op;
