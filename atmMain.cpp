@@ -31,8 +31,10 @@ class System{
     private:
         Node* head;
         Node* currentUser;
-        int createAccNumber();
+
         std::set<int> generatedAccNumbers;
+        int createAccNumber();
+        
         void checkRegister();
         void showBalance();
         void withdraw();
