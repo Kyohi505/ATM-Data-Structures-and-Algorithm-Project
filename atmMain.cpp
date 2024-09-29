@@ -240,7 +240,7 @@ else if(p->data.pinCode != pin){
 else{
     cout<<"Account Login Successful\n";
     currentUser = p;
-    showAcc(n);
+    locateAcc(n);
     machineMenu();
     }
 
