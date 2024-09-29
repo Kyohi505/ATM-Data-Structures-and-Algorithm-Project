@@ -41,8 +41,11 @@ class System{
         void deposit();
         void fundTransfer(int x);
         void changePin();
-        void showAcc(string x);
         void machineMenu();
+        void accMenu();
+
+        void showAcc();
+        void locateAcc(string x);
 
     public:
         System() : head(NULL), currentUser(NULL){}
@@ -68,19 +71,93 @@ int mainMenu(){
     return op;
 }
 
+void System::machineMenu(){
 
-int registerMenu(){
+    while(true){
+        switch(mainMenu()){
+            case 1: 
+                    system("cls");
+                    showBalance();
+                    system("pause");
+                    system("cls");
+                    cout<<"Deposit\n";
+                    deposit();
+                    showBalance();
+                    system("pause");
+                    break;
+
+            case 2: 
+                    system("cls");
+                    cout << "Withdraw\n";
+                    withdraw();
+                    system("pause");
+                    system("cls");
+                    showBalance();
+                    system("pause");
+                    break;
+
+            case 3: 
+                    system("cls");
+                    showBalance();
+                    system("pause");
+                    break;
+
+            case 4: break;
+
+            case 5: 
+                    system("cls");
+                    cout <<"Thank you and Goodbye!\n";
+                    system("pause");
+                    return;
+                    break;
+
+            default:
+                    cout << "Pls enter only (1 - 5)";
+                    cin.clear();
+                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    system("pause");
+                }
+        }
+} 
+
+int infoMenu(){
     int op;
 
     system("cls");
 
-    cout<<"Menu\n";
-    cout<<"1. Register Account\n";
-    cout<<"2. Open Account\n";
+    cout<<"------------------\n";
+    cout<<"1.Account Details\n";
+    cout<<"2.Change Account Information\n";
+    cout<<"3.Change Pin\n";
+    cout<<"4.Cancel\n";
     cout<<"-> ";
 
     cin >> op;
     return op;
+}
+
+void System::accMenu(){
+
+    while(true){
+        switch(infoMenu()){
+            case 1:
+                showAcc();
+                break;
+                
+            case 2:
+
+            case 3:
+
+            case 4:
+                return;
+
+            default:
+                cout<<"Enter only (1-4)\n";
+                cin.clear();
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                system("pause");
+        }
+    }
 }
 
 void System::registerAcc(){
@@ -113,7 +190,6 @@ else{
     }
 
 showAcc(x.accNum);
-
 }
 
 int System::createAccNumber(){
@@ -159,7 +235,16 @@ void System::showBalance(){
     cout << "Your current balance is: "<<currentUser->data.balance << '\n';
 }
 
-void System::showAcc(string x){
+void System::showAcc(){
+    system("cls");
+    cout << "Your acc number is: " << currentUser->data.accNum << '\n';
+    cout << "Acc name: " << currentUser->data.name << '\n';
+    cout << "Bday: " << currentUser->data.bday << '\n';
+    cout << "Contact: " << currentUser->data.contact << '\n';
+    system("pause");
+}
+
+void System::locateAcc(string x){ //only for debug purposes
 Node *p, *q;
 p = q = head;
 
@@ -224,54 +309,20 @@ void System::changePin(){
 
 }
 
-void System::machineMenu(){
+int registerMenu(){
+    int op;
 
-    while(true){
-        switch(mainMenu()){
-            case 1: 
-                    system("cls");
-                    showBalance();
-                    system("pause");
-                    system("cls");
-                    cout<<"Deposit\n";
-                    deposit();
-                    showBalance();
-                    system("pause");
-                    break;
+    system("cls");
 
-            case 2: 
-                    system("cls");
-                    cout << "Withdraw\n";
-                    withdraw();
-                    system("pause");
-                    system("cls");
-                    showBalance();
-                    system("pause");
-                    break;
+    cout<<"Menu\n";
+    cout<<"1. Register Account\n";
+    cout<<"2. Open Account\n";
+    cout<<"3. Exit\n";
+    cout<<"-> ";
 
-            case 3: 
-                    system("cls");
-                    showBalance();
-                    system("pause");
-                    break;
-
-            case 4: break;
-
-            case 5: 
-                    system("cls");
-                    cout <<"Thank you and Goodbye!\n";
-                    system("pause");
-                    return;
-                    break;
-
-            default:
-                    cout << "Pls enter only (1 - 5)";
-                    cin.clear();
-                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    system("pause");
-                }
-        }
-} 
+    cin >> op;
+    return op;
+}
 
 int main(){
 
@@ -295,6 +346,11 @@ string num, pin;
             atm.enterAcc(num, pin);
             break;
 
+        case 3:
+            system("cls");
+            cout<<"Thank You! and Goodbye!";
+            exit(0);
+            
         default:
             cout<<"Invalid input.\n";
             cin.clear();
