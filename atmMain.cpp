@@ -133,7 +133,7 @@ while(p != NULL && n != p->data.accNum && pin !=p->data.pinCode){
         p = p->next;
     }
 
-if(p == NULL || n != p->data.accNum || pin !=p->data.pinCode){
+if(p == NULL || n != p->data.accNum && pin !=p->data.pinCode){
     cout << "Unsuccessful. PLS TRY AGAIN\n";
     system("pause");
     return;
