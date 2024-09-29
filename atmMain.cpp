@@ -133,13 +133,18 @@ while(p != NULL && n != p->data.accNum && pin !=p->data.pinCode){
         p = p->next;
     }
 
-if(p == NULL || n != p->data.accNum && pin !=p->data.pinCode){
-    cout << "Unsuccessful. PLS TRY AGAIN\n";
+if(p == NULL){
+    cout << "Account not found\n";
     system("pause");
     return;
     }
+else if(n == p->data.accNum && pin != p->data.pinCode || n != p->data.accNum && pin == p->data.pinCode){
+    cout << "Unsuccessful. PLS TRY AGAIN\n";
+    system("pause");
+    return;
+}
 else{
-    cout<<"Account Login Successful";
+    cout<<"Account Login Successful\n";
     currentUser = p;
     showAcc(n);
     machineMenu();
