@@ -273,6 +273,7 @@ string num, pin;
         case 1:
             system("cls");
             atm.registerAcc();
+            system("cls");
             cout << "Successful Account Registration\n";
             system("pause");
             break;
