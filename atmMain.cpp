@@ -565,6 +565,7 @@ void System::loadAcc(){
 int main(){
 
 System atm;
+atm.loadAcc();
 string num, pin;
     while(true){
 
@@ -572,6 +573,7 @@ string num, pin;
         case 1:
             system("cls");
             atm.registerAcc();
+            atm.storeAcc();
             break;
 
         case 2:
@@ -584,6 +586,7 @@ string num, pin;
         case 3:
             system("cls");
             cout<<"Thank You! and Goodbye!";
+            atm.storeAcc();
             exit(0);
             
         default:
