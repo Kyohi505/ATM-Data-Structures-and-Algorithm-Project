@@ -3,8 +3,6 @@
 #include <string>
 #include <limits>
 #include <cstdlib>
-#include <ctime>
-#include <set>
 
 using std::cout;
 using std::cin;
@@ -32,9 +30,7 @@ class System{
         Node* head;
         Node* currentUser;
 
-        std::set<int> generatedAccNumbers;
         int createAccNumber();
-        
         void checkRegister();
         void showBalance();
         void withdraw();
@@ -225,15 +221,24 @@ locateAcc(x.accNum);
 }
 
 int System::createAccNumber(){
-    int accNum;
-    srand(time(0));
+    int uniqueAccNum;
+    bool unique;
 
     do{
-        accNum = rand() % 90000 + 10000;
-    }while(generatedAccNumbers.count(accNum));
+        unique = true;
+        uniqueAccNum = 10000 + rand() % 90000;
 
-    generatedAccNumbers.insert(accNum);
-    return accNum;
+        Node* p = head;
+        while(p != NULL){
+            if(std::stoi(p->data.accNum) == uniqueAccNum){
+                unique = false;
+                break;
+            }
+            p = p->next;
+        }
+    }while(!unique);
+
+    return uniqueAccNum;
 }
 
 void System::enterAcc(string n, string pin){
@@ -544,27 +549,6 @@ void System::loadAcc(){
     newNode->next = p;
 }
     file.close();
-}
-
-int System::createAccNumber(){
-    int uniqueAccNum;
-    bool unique;
-
-    do{
-        unique = true;
-        uniqueAccNum = 10000 + rand() % 90000;
-
-        Node* p = head;
-        while(p != NULL){
-            if(std::stoi(p->data.accNum) == uniqueAccNum){
-                unique = false;
-                break;
-            }
-            p = p->next;
-        }
-    }while(!unique);
-
-    return uniqueAccNum;
 }
 
 int main(){
