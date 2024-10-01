@@ -57,7 +57,6 @@ public:
     void enterAcc(string n, string p);
     void storeAcc();
     void loadAcc();
-
 };
 
 int mainMenu()
@@ -284,7 +283,6 @@ void System::enterAcc(string n, string pin)
         return;
     }
 
-    
     int attempts = 0;
     while (attempts < 3)
     {
@@ -304,7 +302,6 @@ void System::enterAcc(string n, string pin)
             {
                 cout << "Please try again: ";
                 cin >> pin;
-                
             }
         }
     }
@@ -439,11 +436,13 @@ void System::fundTransfer()
     cout << "Enter the recipient's Account Number: ";
     cin >> receiver;
 
-    Node* receiverNode = head;
-    while (receiverNode != NULL && receiverNode->data.accNum != receiver) {
+    Node *receiverNode = head;
+    while (receiverNode != NULL && receiverNode->data.accNum != receiver)
+    {
         receiverNode = receiverNode->next;
     }
-    if (receiverNode == NULL) {
+    if (receiverNode == NULL)
+    {
         cout << "Recipient account not found.\n";
         system("pause");
         return;
@@ -451,12 +450,14 @@ void System::fundTransfer()
     cout << "Enter the amount to transfer: ";
     cin >> amount;
 
-    if (amount <= 0) {
+    if (amount <= 0)
+    {
         cout << "Invalid amount.\n";
         system("pause");
         return;
     }
-    if (amount > currentUser->data.balance) {
+    if (amount > currentUser->data.balance)
+    {
         cout << "Insufficient funds. Your current balance is: " << currentUser->data.balance << '\n';
         system("pause");
         return;
@@ -552,6 +553,15 @@ void System::changeInfo()
     }
 }
 
+void System::pinChecker(string &pin)
+{
+    while (pin.length() < 4 || pin.length() > 6)
+    {
+        cout << "Please input a pin code with 4 to 6 digits: ";
+        cin >> pin;
+    }
+}
+
 void System::changePin()
 {
     string oldPin, newPin;
@@ -582,6 +592,7 @@ void System::changePin()
             cout << "(Input 'q' to cancel)\n";
             cout << "-> ";
             cin >> newPin;
+            pinChecker(newPin);
 
             if (newPin == "q")
             {
@@ -633,8 +644,12 @@ void System::storeAcc()
 
     while (p != NULL)
     {
-        file << p->data.name << '\n' << p->data.bday << '\n' << p->data.contact << '\n'
-             << p->data.accNum << '\n' << p->data.balance << '\n' << p->data.pinCode << '\n';
+        file << p->data.name << '\n'
+             << p->data.bday << '\n'
+             << p->data.contact << '\n'
+             << p->data.accNum << '\n'
+             << p->data.balance << '\n'
+             << p->data.pinCode << '\n';
         p = p->next;
     }
 
@@ -647,25 +662,16 @@ void System::loadAcc()
     std::ifstream file("pinCode.txt");
     Acc d;
 
-    while (getline(file, d.name) && getline(file, d.bday) && getline(file, d.contact)
-           && getline(file, d.accNum) && file >> d.balance && file >> d.pinCode) {
+    while (getline(file, d.name) && getline(file, d.bday) && getline(file, d.contact) && getline(file, d.accNum) && file >> d.balance && file >> d.pinCode)
+    {
         file.ignore();
 
-        Node* p = new Node(d);
+        Node *p = new Node(d);
         p->next = head;
         head = p;
     }
 
     file.close();
-}
-
-void System::pinChecker(string &pin)
-{
-    while (pin.length() <= 4 || pin.length() >= 6)
-    {
-        cout << "Please input a pin code with 4 to 6 digits: ";
-        cin >> pin;
-    }
 }
 
 int main()
