@@ -528,8 +528,8 @@ void System::storeAcc(){
     std::ofstream file("pinCode.txt");
 
     while(p != NULL){
-        file <<p->data.name << " " << p->data.bday << " " << p->data.contact << " "
-        << p->data.accNum << " " << p->data.balance << " " << p->data.pinCode << '\n';
+        file <<p->data.name << '\n' << p->data.bday << '\n' << p->data.contact << '\n'
+        << p->data.accNum << '\n' << p->data.balance << '\n' << p->data.pinCode << '\n';
         
         p = p->next;
     }
@@ -543,22 +543,14 @@ void System::loadAcc(){
     std::ifstream file("pinCode.txt");
     Acc d;
     
-    while(file >> d.name >> d.bday >> d.contact >> d.accNum >> d.balance >> d.pinCode){
+    while (getline(file, d.name) && getline(file, d.bday) && getline(file, d.contact) &&
+           getline(file, d.accNum) && file >> d.balance && file >> d.pinCode) {
+        file.ignore();
 
-    Node *p, *q, *newNode;
-    p = q = head;
-    newNode = new Node(d);
-
-    while(p != NULL){
-        q = p;
-        p = p -> next;
+        Node* p = new Node(d);
+        p->next = head;
+        head = p;
     }
-    if (p == head)
-        head = newNode;
-    else
-    q->next = newNode;
-    newNode->next = p;
-}
     file.close();
 }
 
