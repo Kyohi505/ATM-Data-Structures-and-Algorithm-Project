@@ -45,6 +45,7 @@ class System{
         void machineMenu();
         void accMenu();
         void showAcc();
+        void loadAcc();
 
         void locateAcc(string x);
 
@@ -518,6 +519,30 @@ int registerMenu(){
 
     cin >> op;
     return op;
+}
+
+void System::loadAcc(){
+
+    std::ifstream file("pinCode.txt");
+    Acc d;
+    
+    while(file >> d.name >> d.bday >> d.contact >> d.accNum >> d.balance >> d.pinCode){
+
+    Node *p, *q, *newNode;
+    p = q = head;
+    newNode = new Node(d);
+
+    while(p != NULL){
+        q = p;
+        p = p -> next;
+    }
+    if (p == head)
+        head = newNode;
+    else
+    q->next = newNode;
+    newNode->next = p;
+}
+    file.close();
 }
 
 int main(){
