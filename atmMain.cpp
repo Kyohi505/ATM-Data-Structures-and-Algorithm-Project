@@ -241,31 +241,41 @@ int System::createAccNumber(){
     return uniqueAccNum;
 }
 
-void System::enterAcc(string n, string pin){
-Node* p, *q;
-p = q = head;
-while(p != NULL && n != p->data.accNum){
+void System::enterAcc(string n, string pin) { //update here: added a 3 fail password attempt exit function
+    Node* p, *q;
+    p = q = head;
+    while (p != NULL && n != p->data.accNum) {
         q = p;
         p = p->next;
     }
 
-if(p == NULL){
-    cout << "Account not found\n";
-    system("pause");
-    return;
-    }
-else if(p->data.pinCode != pin){
-    cout << "Unsuccessful. PLS TRY AGAIN\n";
-    system("pause");
-    return;
-}
-else{
-    cout<<"Account Login Successful\n";
-    currentUser = p;
-    locateAcc(n);
-    machineMenu();
-    }
-
+    if (p == NULL) {
+        cout << "Account not found\n";
+        system("pause");
+        return;
+        }
+            int attempts = 0;
+            while (attempts < 3) {
+                if (p->data.pinCode == pin) {
+                    cout << "Account Login Successful\n";
+                    currentUser = p;
+                    locateAcc(n);
+                    machineMenu();
+                    return;
+                        } else {
+                        attempts++;
+                        cout << "Incorrect Pin. Attempt " << attempts << " of 3.\n";
+                            if (attempts < 3) {
+                                cout << "Please try again: ";
+                                cin >> pin;
+                        }
+                }
+        }
+        if (attempts == 3) {
+            cout << "Too many failed attempts. Returning to main menu.\n";
+            system("pause");
+            return;
+        }
 }
 
 void System::showBalance(){
