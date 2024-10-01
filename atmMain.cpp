@@ -45,7 +45,7 @@ class System{
         void machineMenu();
         void accMenu();
         void showAcc();
-        void loadAcc();
+        
 
         void locateAcc(string x);
 
@@ -56,6 +56,7 @@ class System{
         void registerAcc();
         void enterAcc(string n, string p);
         void storeAcc();
+        void loadAcc();
 };
 
 int mainMenu(){
