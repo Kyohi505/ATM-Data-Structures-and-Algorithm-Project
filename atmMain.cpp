@@ -545,6 +545,27 @@ void System::loadAcc(){
     file.close();
 }
 
+int System::createAccNumber(){
+    int uniqueAccNum;
+    bool unique;
+
+    do{
+        unique = true;
+        uniqueAccNum = 10000 + rand() % 90000;
+
+        Node* p = head;
+        while(p != NULL){
+            if(std::stoi(p->data.accNum) == uniqueAccNum){
+                unique = false;
+                break;
+            }
+            p = p->next;
+        }
+    }while(!unique);
+
+    return uniqueAccNum;
+}
+
 int main(){
 
 System atm;
