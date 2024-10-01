@@ -262,21 +262,6 @@ else{
 
 }
 
-void System::storeAcc(){
-    Node* p = head;
-    std::ofstream file("pinCode.txt");
-
-    while(p != NULL){
-        file <<p->data.name << " " << p->data.bday << " " << p->data.contact << " "
-        << p->data.accNum << " " << p->data.balance << " " << p->data.pinCode << '\n';
-        
-        p = p->next;
-    }
-
-    file.close();
-
-}
-
 void System::showBalance(){
     cout << "Your current balance is: "<<currentUser->data.balance << '\n';
 }
@@ -519,6 +504,21 @@ int registerMenu(){
 
     cin >> op;
     return op;
+}
+
+void System::storeAcc(){
+    Node* p = head;
+    std::ofstream file("pinCode.txt");
+
+    while(p != NULL){
+        file <<p->data.name << " " << p->data.bday << " " << p->data.contact << " "
+        << p->data.accNum << " " << p->data.balance << " " << p->data.pinCode << '\n';
+        
+        p = p->next;
+    }
+
+    file.close();
+
 }
 
 void System::loadAcc(){
