@@ -45,6 +45,7 @@ private:
     void machineMenu();
     void accMenu();
     void showAcc();
+    void pinChecker(string &pin);
 
     void locateAcc(string x);
 
@@ -56,7 +57,7 @@ public:
     void enterAcc(string n, string p);
     void storeAcc();
     void loadAcc();
-    void pinChecker(string &pin);
+
 };
 
 int mainMenu()
@@ -283,7 +284,7 @@ void System::enterAcc(string n, string pin)
         return;
     }
 
-    pinChecker(pin);
+    
     int attempts = 0;
     while (attempts < 3)
     {
@@ -303,7 +304,7 @@ void System::enterAcc(string n, string pin)
             {
                 cout << "Please try again: ";
                 cin >> pin;
-                pinChecker(pin);
+                
             }
         }
     }
