@@ -3,6 +3,7 @@
 #include <string>
 #include <limits>
 #include <cstdlib>
+#include <ctime> //wala lang baka may magawa to
 
 using std::cout;
 using std::cin;
