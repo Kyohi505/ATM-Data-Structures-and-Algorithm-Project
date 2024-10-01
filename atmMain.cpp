@@ -54,6 +54,7 @@ class System{
         System() : head(NULL), currentUser(NULL){}
         void registerAcc();
         void enterAcc(string n, string p);
+        void storeAcc();
 };
 
 int mainMenu(){
@@ -257,6 +258,21 @@ else{
     locateAcc(n);
     machineMenu();
     }
+
+}
+
+void System::storeAcc(){
+    Node* p = head;
+    std::ofstream file("pinCode.txt");
+
+    while(p != NULL){
+        file <<p->data.name << " " << p->data.bday << " " << p->data.contact << " "
+        << p->data.accNum << " " << p->data.balance << " " << p->data.pinCode << '\n';
+        
+        p = p->next;
+    }
+
+    file.close();
 
 }
 
