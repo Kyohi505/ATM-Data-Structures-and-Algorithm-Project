@@ -377,7 +377,43 @@ int System::initialDeposit(){
 }
 
 void System::fundTransfer(){
+    string receiver;
+    double amount;
 
+    system("cls");
+    cout << "Fund Transfer\n";
+    cout << "Enter the recipient's Account Number: ";
+    cin >> receiver;
+
+    Node* receiverNode = head;
+    while (receiverNode != NULL && receiverNode->data.accNum != receiver) {
+        receiverNode = receiverNode->next;
+    }
+    if (receiverNode == NULL) {
+        cout << "Recipient account not found.\n";
+        system("pause");
+        return;
+    }
+    cout << "Enter the amount to transfer: ";
+    cin >> amount;
+
+    if (amount <= 0) {
+        cout << "Invalid amount.\n";
+        system("pause");
+        return;
+    }
+    if (amount > currentUser->data.balance) {
+        cout << "Insufficient funds. Your current balance is: " << currentUser->data.balance << '\n';
+        system("pause");
+        return;
+    }
+    currentUser->data.balance -= amount;
+    receiverNode->data.balance += amount;
+
+    cout << "Successfully transferred " << amount << " to account number " << receiver << ".\n";
+    cout << "Your new balance is: " << currentUser->data.balance << '\n';
+    storeAcc();
+    system("pause");
 }
 
 void System::checkRegister(){
