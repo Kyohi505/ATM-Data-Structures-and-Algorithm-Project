@@ -46,10 +46,8 @@ private:
     void accMenu();
     void showAcc();
     void pinChecker(string &pin);
-
     void locateAcc(string x);
-
-    void fundTransfer(); // not done need filehandling
+    void fundTransfer();
 
 public:
     System() : head(NULL), currentUser(NULL) {}
@@ -71,7 +69,7 @@ int mainMenu()
     cout << "3 - Balance Inquiry\n";
     cout << "4 - Fund Transfer\n";
     cout << "5 - Account\n";
-    cout << "6 - Cancel\n";
+    cout << "6 - Log Out\n";
     cout << "Select(1-6)\n ";
     cout << "-> ";
 
@@ -125,6 +123,7 @@ void System::machineMenu()
 
         case 6:
             system("cls");
+            cout << "Logging out...\n";
             cout << "Thank you and Goodbye!\n";
             system("pause");
             return;
@@ -149,7 +148,7 @@ int infoMenu()
     cout << "1 - Account Details\n";
     cout << "2 - Change Account Information\n";
     cout << "3 - Change Pin\n";
-    cout << "4 - Cancel\n";
+    cout << "4 - Exit\n";
     cout << "-> ";
 
     cin >> op;
@@ -315,16 +314,16 @@ void System::enterAcc(string n, string pin)
 
 void System::showBalance()
 {
-    cout << "Your current balance is: " << currentUser->data.balance << '\n';
+    cout << "Your current balance is: ₱ " << currentUser->data.balance << '\n';
 }
 
 void System::showAcc()
 {
     system("cls");
-    cout << "Your acc number is: " << currentUser->data.accNum << '\n';
-    cout << "Acc name: " << currentUser->data.name << '\n';
-    cout << "Bday: " << currentUser->data.bday << '\n';
-    cout << "Contact: " << currentUser->data.contact << '\n';
+    cout << "Your account number is: " << currentUser->data.accNum << '\n';
+    cout << "Account name: " << currentUser->data.name << '\n';
+    cout << "Birthdate: " << currentUser->data.bday << '\n';
+    cout << "Contact number: " << currentUser->data.contact << '\n';
     system("pause");
 }
 
@@ -361,7 +360,7 @@ void System::withdraw()
 {
 
     double amount = 0;
-    cout << "Enter amount to withdraw: \n";
+    cout << "Enter amount to withdraw: ₱ \n";
     cin >> amount;
 
     if (amount > currentUser->data.balance || amount <= 0)
@@ -372,7 +371,7 @@ void System::withdraw()
     else
     {
         currentUser->data.balance -= amount;
-        cout << "You have successfully withdrawn: " << amount << '\n';
+        cout << "You have successfully withdrawn: ₱ " << amount << '\n';
     }
 }
 
@@ -380,12 +379,12 @@ void System::deposit()
 {
 
     double amount = 0;
-    cout << "Enter amount to deposit: \n";
+    cout << "Enter amount to deposit: ₱ \n";
     cin >> amount;
 
     if (amount <= 0)
     {
-        cout << "invalid amount\n";
+        cout << "Invalid amount\n";
         return;
     }
     else
@@ -399,7 +398,7 @@ int System::initialDeposit()
     double amount = 0;
     do
     {
-        cout << "Initial Deposit for Account Registration (Min. 5000)\n";
+        cout << "Initial Deposit for Account Registration (Min. ₱5000)\n";
         cout << "(Enter '1' to cancel)\n";
         cout << "-> ";
         cin >> amount;
@@ -410,7 +409,7 @@ int System::initialDeposit()
         }
         else if (amount < 5000)
         {
-            cout << "You must deposit minimum of 5000!\n";
+            cout << "You must deposit minimum of ₱5000!\n";
             system("pause");
             system("cls");
         }
@@ -447,7 +446,7 @@ void System::fundTransfer()
         system("pause");
         return;
     }
-    cout << "Enter the amount to transfer: ";
+    cout << "Enter the amount to transfer: ₱ ";
     cin >> amount;
 
     if (amount <= 0)
@@ -458,14 +457,14 @@ void System::fundTransfer()
     }
     if (amount > currentUser->data.balance)
     {
-        cout << "Insufficient funds. Your current balance is: " << currentUser->data.balance << '\n';
+        cout << "Insufficient funds. Your current balance is: ₱ " << currentUser->data.balance << '\n';
         system("pause");
         return;
     }
     currentUser->data.balance -= amount;
     receiverNode->data.balance += amount;
 
-    cout << "Successfully transferred " << amount << " to account number " << receiver << ".\n";
+    cout << "Successfully transferred ₱ " << amount << " to account number " << receiver << ".\n";
     cout << "Your new balance is: " << currentUser->data.balance << '\n';
     storeAcc();
     system("pause");
@@ -538,7 +537,7 @@ void System::changeInfo()
             }
             currentUser->data.contact = newInfo;
             system("cls");
-            cout << "Updated Birthdate: " << currentUser->data.contact;
+            cout << "Updated contact number: " << currentUser->data.contact;
             break;
 
         case 4:
@@ -569,7 +568,7 @@ void System::changePin()
     do
     {
         system("cls");
-        cout << "Enter Current Password\n";
+        cout << "Enter Current Pin\n";
         cout << "(Input 'q' to cancel)\n";
         cout << "-> ";
         cin >> oldPin;
@@ -587,6 +586,7 @@ void System::changePin()
 
         else
         {
+            while(true){
             system("cls");
             cout << "Enter New Pin\n";
             cout << "(Input 'q' to cancel)\n";
@@ -618,6 +618,7 @@ void System::changePin()
                 return;
             }
         }
+      }
     } while (oldPin != "q" || newPin != "q");
 }
 
