@@ -288,7 +288,7 @@ void System::enterAcc(string n, string pin)
         if (p->data.pinCode == pin)
         {
             cout << "Account Login Successful\n";
-            currentUser = p;
+            currentUser = q;
             locateAcc(n);
             machineMenu();
             return;
