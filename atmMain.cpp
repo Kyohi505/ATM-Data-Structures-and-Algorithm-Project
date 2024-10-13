@@ -267,11 +267,9 @@ int System::createAccNumber()
 
 void System::enterAcc(string n, string pin)
 { // update here: added a 3 fail password attempt exit function
-    Node *p, *q;
-    p = q = head;
+    Node *p = head;
     while (p != NULL && n != p->data.accNum)
     {
-        q = p;
         p = p->next;
     }
 
@@ -288,7 +286,7 @@ void System::enterAcc(string n, string pin)
         if (p->data.pinCode == pin)
         {
             cout << "Account Login Successful\n";
-            currentUser = q;
+            currentUser = p;
             locateAcc(n);
             machineMenu();
             return;
@@ -329,12 +327,10 @@ void System::showAcc()
 
 void System::locateAcc(string x)
 { // only for debug purposes
-    Node *p, *q;
-    p = q = head;
+    Node *p = head;
 
     while (p != NULL && p->data.accNum != x)
     {
-        q = p;
         p = p->next;
     }
     if (p == NULL)
