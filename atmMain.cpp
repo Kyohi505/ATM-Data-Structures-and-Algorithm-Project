@@ -33,7 +33,8 @@ class System
 private:
     Node *head;
     Node *currentUser;
-
+    string Encrypt(const string &text, const string &key);
+    string Decrypt(const string &ciphertext, const string &key);
     int createAccNumber();
     void checkRegister();
     void showBalance();
@@ -48,6 +49,7 @@ private:
     void pinChecker(string &pin);
     void locateAcc(string x);
     void fundTransfer();
+    string encryptionKey = "ilovedsa";
 
 public:
     System() : head(NULL), currentUser(NULL) {}
@@ -200,6 +202,7 @@ void System::registerAcc()
     cin >> x.contact;
     cout << "Input Pin: ";
     cin >> x.pinCode;
+    x.pinCode = Encrypt(x.pinCode, encryptionKey);
     pinChecker(x.pinCode);
 
     x.accNum = std::to_string(createAccNumber());
@@ -582,39 +585,40 @@ void System::changePin()
 
         else
         {
-            while(true){
-            system("cls");
-            cout << "Enter New Pin\n";
-            cout << "(Input 'q' to cancel)\n";
-            cout << "-> ";
-            cin >> newPin;
-            pinChecker(newPin);
-
-            if (newPin == "q")
+            while (true)
             {
-                return;
-            }
-            else if (newPin == currentUser->data.pinCode)
-            {
-                cout << "That is already your pin\n";
-                system("pause");
-                return;
-            }
-            else
-            {
-                currentUser->data.pinCode = newPin;
-                cout << "Pin Successfully Changed!\n";
-
-                system("pause");
                 system("cls");
+                cout << "Enter New Pin\n";
+                cout << "(Input 'q' to cancel)\n";
+                cout << "-> ";
+                cin >> newPin;
+                pinChecker(newPin);
 
-                cout << "This is your current Pin: " << currentUser->data.pinCode << '\n';
-                cout << "Do not share to others!!\n";
-                system("pause");
-                return;
+                if (newPin == "q")
+                {
+                    return;
+                }
+                else if (newPin == currentUser->data.pinCode)
+                {
+                    cout << "That is already your pin\n";
+                    system("pause");
+                    return;
+                }
+                else
+                {
+                    currentUser->data.pinCode = newPin;
+                    cout << "Pin Successfully Changed!\n";
+
+                    system("pause");
+                    system("cls");
+
+                    cout << "This is your current Pin: " << currentUser->data.pinCode << '\n';
+                    cout << "Do not share to others!!\n";
+                    system("pause");
+                    return;
+                }
             }
         }
-      }
     } while (oldPin != "q" || newPin != "q");
 }
 
@@ -645,8 +649,10 @@ void System::storeAcc()
              << p->data.bday << '\n'
              << p->data.contact << '\n'
              << p->data.accNum << '\n'
-             << p->data.balance << '\n'
-             << p->data.pinCode << '\n';
+             << p->data.balance << '\n';
+
+        string encryptedPin = Encrypt(p->data.pinCode, encryptionKey);
+        file << encryptedPin << '\n';
         p = p->next;
     }
 
@@ -663,12 +669,71 @@ void System::loadAcc()
     {
         file.ignore();
 
+        d.pinCode = Decrypt(d.pinCode, encryptionKey);
         Node *p = new Node(d);
         p->next = head;
         head = p;
     }
 
     file.close();
+}
+
+string System::Encrypt(const string &text, const string &key)
+{
+    string encrypted = "";
+    int keyIndex = 0;
+    int keyLength = key.length();
+
+    for (char c : text)
+    {
+        if (isdigit(c)) // eto default
+        {
+            encrypted += (c - '0' + (key[keyIndex % keyLength] - '0')) % 10 + '0';
+            keyIndex++;
+        }
+        else if (isalpha(c)) // if ever mag lagay ng letter sa pincode yung user
+        {
+            bool isUpper = isupper(c);
+            char base = isUpper ? 'A' : 'a';
+            encrypted += (c - base + (tolower(key[keyIndex % keyLength]) - 'a')) % 26 + base;
+            keyIndex++;
+        }
+        else
+        {
+            encrypted += c;
+        }
+    }
+
+    return encrypted;
+}
+
+string System::Decrypt(const string &ciphertext, const string &key)
+{
+    string decrypted = "";
+    int keyIndex = 0;
+    int keyLength = key.length();
+
+    for (char c : ciphertext)
+    {
+        if (isdigit(c)) // same lang sa encrypt pang numbers to
+        {
+            decrypted += (c - '0' - (key[keyIndex % keyLength] - '0') + 10) % 10 + '0';
+            keyIndex++;
+        }
+        else if (isalpha(c))
+        {
+            bool isUpper = isupper(c);
+            char base = isUpper ? 'A' : 'a';
+            decrypted += (c - base - (tolower(key[keyIndex % keyLength]) - 'a') + 26) % 26 + base;
+            keyIndex++;
+        }
+        else
+        {
+            decrypted += c;
+        }
+    }
+
+    return decrypted;
 }
 
 int main()
