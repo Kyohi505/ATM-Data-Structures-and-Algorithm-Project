@@ -33,8 +33,7 @@ class System
 private:
     Node *head;
     Node *currentUser;
-    string Encrypt(const string &text, const string &key);
-    string Decrypt(const string &ciphertext, const string &key);
+
     int createAccNumber();
     void checkRegister();
     void showBalance();
@@ -49,7 +48,8 @@ private:
     void pinChecker(string &pin);
     void locateAcc(string x);
     void fundTransfer();
-    string encryptionKey = "ilovedsa";
+    string adam = "ilovedsa";
+    string EncryptDecrypt(string pin, string adam);
 
 public:
     System() : head(NULL), currentUser(NULL) {}
@@ -202,7 +202,6 @@ void System::registerAcc()
     cin >> x.contact;
     cout << "Input Pin: ";
     cin >> x.pinCode;
-    x.pinCode = Encrypt(x.pinCode, encryptionKey);
     pinChecker(x.pinCode);
 
     x.accNum = std::to_string(createAccNumber());
@@ -638,6 +637,22 @@ int registerMenu()
     return op;
 }
 
+
+string System::EncryptDecrypt(string pin, string adam)
+{
+    string result = pin;
+    int adamLen = adam.length();
+
+    for (size_t i = 0; i < pin.length(); i++)
+    {
+        char adamChar = adam[i % adamLen];
+
+        result[i] = ((pin[i] - '0') + (adamChar - '0')) % 10 + '0';
+    }
+
+    return result;
+}
+
 void System::storeAcc()
 {
     Node *p = head;
@@ -645,14 +660,14 @@ void System::storeAcc()
 
     while (p != NULL)
     {
+        string encryptedPin = EncryptDecrypt(p->data.pinCode, adam);
+
         file << p->data.name << '\n'
              << p->data.bday << '\n'
              << p->data.contact << '\n'
              << p->data.accNum << '\n'
-             << p->data.balance << '\n';
-
-        string encryptedPin = Encrypt(p->data.pinCode, encryptionKey);
-        file << encryptedPin << '\n';
+             << p->data.balance << '\n'
+             << encryptedPin << '\n'; 
         p = p->next;
     }
 
@@ -661,79 +676,21 @@ void System::storeAcc()
 
 void System::loadAcc()
 {
-
     std::ifstream file("pinCode.txt");
     Acc d;
 
-    while (getline(file, d.name) && getline(file, d.bday) && getline(file, d.contact) && getline(file, d.accNum) && file >> d.balance && file >> d.pinCode)
+    while (getline(file, d.name) && getline(file, d.bday) && getline(file, d.contact) && getline(file, d.accNum) && file >> d.balance && getline(file, d.pinCode))
     {
         file.ignore();
 
-        d.pinCode = Decrypt(d.pinCode, encryptionKey);
+        d.pinCode = EncryptDecrypt(d.pinCode, adam);
+
         Node *p = new Node(d);
         p->next = head;
         head = p;
     }
 
     file.close();
-}
-
-string System::Encrypt(const string &text, const string &key)
-{
-    string encrypted = "";
-    int keyIndex = 0;
-    int keyLength = key.length();
-
-    for (char c : text)
-    {
-        if (isdigit(c)) // eto default
-        {
-            encrypted += (c - '0' + (key[keyIndex % keyLength] - '0')) % 10 + '0';
-            keyIndex++;
-        }
-        else if (isalpha(c)) // if ever mag lagay ng letter sa pincode yung user
-        {
-            bool isUpper = isupper(c);
-            char base = isUpper ? 'A' : 'a';
-            encrypted += (c - base + (tolower(key[keyIndex % keyLength]) - 'a')) % 26 + base;
-            keyIndex++;
-        }
-        else
-        {
-            encrypted += c;
-        }
-    }
-
-    return encrypted;
-}
-
-string System::Decrypt(const string &ciphertext, const string &key)
-{
-    string decrypted = "";
-    int keyIndex = 0;
-    int keyLength = key.length();
-
-    for (char c : ciphertext)
-    {
-        if (isdigit(c)) // same lang sa encrypt pang numbers to
-        {
-            decrypted += (c - '0' - (key[keyIndex % keyLength] - '0') + 10) % 10 + '0';
-            keyIndex++;
-        }
-        else if (isalpha(c))
-        {
-            bool isUpper = isupper(c);
-            char base = isUpper ? 'A' : 'a';
-            decrypted += (c - base - (tolower(key[keyIndex % keyLength]) - 'a') + 26) % 26 + base;
-            keyIndex++;
-        }
-        else
-        {
-            decrypted += c;
-        }
-    }
-
-    return decrypted;
 }
 
 int main()
