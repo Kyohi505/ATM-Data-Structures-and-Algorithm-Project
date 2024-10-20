@@ -769,6 +769,7 @@ int main() {
 
     System atm;
     atm.loadAcc();
+    atm.insertATM();
     string num, pin;
     while (true)
     {
