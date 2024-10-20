@@ -765,32 +765,44 @@ void System::checkPinFromATM()
 
 }
 int main() {
-    System atmSystem;
-    int choice;
-    do {
-        system("cls");
-        cout << "ATM System\n";
-        cout << "1 - Register Account\n";
-        cout << "2 - Access Account\n";
-        cout << "3 - Exit\n";
-        cout << "Choose an option: ";
-        cin >> choice;
+{
 
-        switch (choice) {
-            case 1:
-                atmSystem.registerAcc();
-                break;
-            case 2:
-                atmSystem.checkPinFromATM();
-                break;
-            case 3:
-                cout << "Exiting...\n";
-                break;
-            default:
-                cout << "Invalid option, please choose between 1 and 3.\n";
-                break;
+    System atm;
+    atm.loadAcc();
+    string num, pin;
+    while (true)
+    {
+
+        switch (registerMenu())
+        {
+        case 1:
+            system("cls");
+            atm.registerAcc();
+            atm.storeAcc();
+            break;
+
+        case 2:
+            system("cls");
+            cout << "Enter Account Number: ";
+            cin >> num;
+            cout << "Enter Pin: ";
+            cin >> pin;
+            atm.enterAcc(num, pin);
+            break;
+
+        case 3:
+            system("cls");
+            cout << "Thank You! and Goodbye!";
+            atm.storeAcc();
+            exit(0);
+
+        default:
+            cout << "Invalid input.\n";
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            system("pause");
         }
-    } while (choice != 3);
+    }
 
     return 0;
 }
