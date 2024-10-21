@@ -18,6 +18,7 @@ struct Acc
     string accNum;
     string pinCode;
     double balance;
+    string encryptedPin;
 };
 
 struct Node
@@ -49,7 +50,7 @@ private:
     void locateAcc(string x);
     void fundTransfer();
     string adam = "ilovedsa";
-    string EncryptDecrypt(string pin, string adam);
+    string decryptEncrypt(string pin, string adam);
 
 public:
     System() : head(NULL), currentUser(NULL) {}
@@ -203,6 +204,8 @@ void System::registerAcc()
     cout << "Input Pin: ";
     cin >> x.pinCode;
     pinChecker(x.pinCode);
+
+    x.encryptedPin = decryptEncrypt(x.pinCode, adam);
 
     x.accNum = std::to_string(createAccNumber());
 
@@ -637,22 +640,6 @@ int registerMenu()
     return op;
 }
 
-
-string System::EncryptDecrypt(string pin, string adam)
-{
-    string result = pin;
-    int adamLen = adam.length();
-
-    for (size_t i = 0; i < pin.length(); i++)
-    {
-        char adamChar = adam[i % adamLen];
-
-        result[i] = ((pin[i] - '0') + (adamChar - '0')) % 10 + '0';
-    }
-
-    return result;
-}
-
 void System::storeAcc()
 {
     Node *p = head;
@@ -660,14 +647,12 @@ void System::storeAcc()
 
     while (p != NULL)
     {
-        string encryptedPin = EncryptDecrypt(p->data.pinCode, adam);
-
         file << p->data.name << '\n'
              << p->data.bday << '\n'
              << p->data.contact << '\n'
              << p->data.accNum << '\n'
              << p->data.balance << '\n'
-             << encryptedPin << '\n'; 
+             << p->data.encryptedPin << '\n';
         p = p->next;
     }
 
@@ -679,11 +664,16 @@ void System::loadAcc()
     std::ifstream file("pinCode.txt");
     Acc d;
 
-    while (getline(file, d.name) && getline(file, d.bday) && getline(file, d.contact) && getline(file, d.accNum) && file >> d.balance && getline(file, d.pinCode))
+    while (getline(file, d.name) &&
+           getline(file, d.bday) &&
+           getline(file, d.contact) &&
+           getline(file, d.accNum) &&
+           file >> d.balance)
     {
         file.ignore();
+        getline(file, d.encryptedPin);
 
-        d.pinCode = EncryptDecrypt(d.pinCode, adam);
+        d.pinCode = decryptEncrypt(d.encryptedPin, adam);
 
         Node *p = new Node(d);
         p->next = head;
@@ -691,6 +681,16 @@ void System::loadAcc()
     }
 
     file.close();
+}
+
+string System::decryptEncrypt(string pin, string adam)
+{
+    string result = pin;
+    for (size_t i = 0; i < pin.length(); i++)
+    {
+        result[i] = pin[i] ^ adam[i % adam.length()];
+    }
+    return result;
 }
 
 int main()
