@@ -3,6 +3,7 @@
 #include <string>
 #include <limits>
 #include <cstdlib>
+#include <filesystem>
 
 using std::cout;
 using std::cin;
@@ -639,84 +640,82 @@ int registerMenu()
     cin >> op;
     return op;
 }
-
 bool System::isUSBInserted() {
-    std::ifstream dDrive("D:/");
-    std::ifstream gDrive("G:/");
-
-    if (dDrive || gDrive) {
-        return true;
-    }
-    return false;
+    return !getUSBDrive().empty();
 }
 
 string System::getUSBDrive() {
-    if (std::ifstream("D:/")) {
-        return "D:/";
-    } else if (std::ifstream("G:/")) {
-        return "G:/";
+    for (char drive = 'A'; drive <= 'Z'; drive++) {
+        std::string drivePath = std::string(1, drive) + ":\\";
+        if (std::filesystem::exists(drivePath)) {
+            return drivePath;
+        }
     }
-    return ""; // empty string no usb found
+    return ""; //return empty if no drive found
 }
 
-void System::insertATM() {
-    cout << "Insert ATM card (USB Drive)...\n";
-    while (!isUSBInserted()) {
-        cout << "ATM card not detected. Please insert your USB drive.\n";
-        system("pause");
-    }
-    cout << "ATM card detected!\n";
-    system("pause");
 }
 
 void System::saveToUSB() {
-    string drive = getUSBDrive();
-    if (drive.empty()) {
-        cout << "No ATM card detected!\n";
-        return;
+    string usbPath = getUSBDrive() + "accounts.txt";
+    std::ofstream outFile(usbPath, std::ios::trunc);
+
+    if (outFile.is_open()) {
+        Node* p = head;
+        while (p != NULL) {
+            outFile << p->data.accNum << '\n'
+                    << p->data.name << '\n'
+                    << p->data.bday << '\n'
+                    << p->data.contact << '\n'
+                    << p->data.pinCode << '\n'
+                    << p->data.balance << '\n';
+            p = p->next;
+        }
+        outFile.close();
+    } else {
+        cout << "Failed to open USB drive for saving accounts.\n"; //debugging purpose
     }
-
-    std::ofstream atmFile(drive + "atmCard.txt");
-
-    Node* p = head;
-
-    while (p != NULL) {
-        atmFile << p->data.name << '\n' << p->data.bday << '\n'
-                << p->data.contact << '\n' << p->data.accNum << '\n'
-                << p->data.balance << '\n' << p->data.pinCode << '\n';
-        p = p->next;
-    }
-
-    atmFile.close();
-    cout << "Account data saved to ATM card (USB).\n";
 }
 
 void System::loadFromUSB() {
-    string drive = getUSBDrive();
-    if (drive.empty()) {
-        cout << "No ATM card detected!\n";
-        return;
+    string usbPath = getUSBDrive() + "accounts.txt";
+    std::ifstream atmFile(usbPath);
+
+    if (atmFile.is_open()) {
+        while (!atmFile.eof()) {
+            Acc x;
+            getline(atmFile, x.accNum);
+            getline(atmFile, x.name);
+            getline(atmFile, x.bday);
+            getline(atmFile, x.contact);
+            getline(atmFile, x.pinCode);
+            atmFile >> x.balance;
+            atmFile.ignore(); 
+
+            Node* newNode = new Node(x);
+            newNode->next = head;
+            head = newNode;
+        }
+        atmFile.close();
+    } else {
+        cout << "Failed to open USB drive for loading accounts.\n";
     }
+}
 
-    std::ifstream atmFile(drive + "atmCard.txt");
-
-    if (!atmFile) {
-        cout << "No account data found on the ATM card (USB).\n";
-        return;
+void System::insertATM() {
+    loadFromUSB(); // Load accounts from USB
+    if (isUSBInserted()) {
+        cout << "USB detected.\n";
+        // Prompt user for account number and PIN
+        string accNum, pin;
+        cout << "Enter Account Number: ";
+        cin >> accNum;
+        cout << "Enter PIN: ";
+        cin >> pin;
+        enterAcc(accNum, pin);
+    } else {
+        cout << "No USB detected. Please insert your USB.\n";
     }
-
-    Acc acc;
-    while (getline(atmFile, acc.name) && getline(atmFile, acc.bday) &&
-           getline(atmFile, acc.contact) && getline(atmFile, acc.accNum) &&
-           atmFile >> acc.balance && atmFile >> acc.pinCode) {
-        atmFile.ignore();
-        Node* newNode = new Node(acc);
-        newNode->next = head;
-        head = newNode;
-    }
-
-    atmFile.close();
-    cout << "Account data loaded from ATM card (USB).\n";
 }
 
 void System::storeAcc() {
