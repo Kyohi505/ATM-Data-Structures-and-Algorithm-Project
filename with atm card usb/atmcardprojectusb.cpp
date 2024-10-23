@@ -213,6 +213,9 @@ void System::registerAcc(string usbPath)
     cin >> x.contact;
     cout << "Input Pin: ";
     cin >> x.pinCode;
+    pinChecker(x.pinCode);
+
+    x.encryptedPin = decryptEncrypt(x.pinCode, adam);
 
     x.accNum = std::to_string(createAccNumber());
 
