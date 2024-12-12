@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <vector>
 
 using namespace std;
 
@@ -13,16 +12,67 @@ struct Node {
     Node(char c, int f) : character(c), freq(f), left(NULL), right(NULL) {}
 };
 
+struct PQNode {
+    Node* tree;
+    PQNode* next;
+
+    PQNode(Node* t) : tree(t), next(NULL) {}
+};
+
+class PriorityQueue {
+private:
+    PQNode* head;
+
+public:
+    PriorityQueue() : head(NULL) {}
+
+    void enqueue(Node* tree) {
+        PQNode* newNode = new PQNode(tree);
+        if (!head || head->tree->freq > tree->freq) {
+            newNode->next = head;
+            head = newNode;
+            return;
+        }
+
+        PQNode* current = head;
+        while (current->next && current->next->tree->freq <= tree->freq) {
+            current = current->next;
+        }
+        newNode->next = current->next;
+        current->next = newNode;
+    }
+
+    Node* dequeue() {
+        if (!head) return NULL;
+        PQNode* temp = head;
+        head = head->next;
+        Node* tree = temp->tree;
+        delete temp;
+        return tree;
+    }
+
+    bool isEmpty() {
+        return head == NULL;
+    }
+
+    ~PriorityQueue() {
+        while (!isEmpty()) {
+            dequeue();
+        }
+    }
+};
+
 class MyHuffman {
 private:
     Node* root;
-    vector<pair<char, string>> charCodes;
+    string encodedData;
 
 public:
     MyHuffman() : root(NULL) {}
 
     void buildTree(const string& input);
-    void generateCodes(Node* node, string str);
+    void generateCodes(Node* node, string str, string codes[]);
+
     void serializeTree(Node* node, string& serializedTree);
     Node* deserializeTree(const string& serializedTree, int& index);
     void encodeSentence(const string& input);
@@ -33,63 +83,43 @@ public:
 };
 
 void MyHuffman::buildTree(const string& input) {
-    vector<pair<char, int>> freq;
+    int freq[256] = {0};
     for (char c : input) {
-        bool found = false;
-        for (auto& p : freq) {
-            if (p.first == c) {
-                p.second++;
-                found = true;
-                break;
-            }
-        }
-        if (!found) freq.push_back({c, 1});
+        freq[(unsigned char)c]++;
     }
 
-    for (size_t i = 0; i < freq.size(); ++i) {
-        for (size_t j = i + 1; j < freq.size(); ++j) {
-            if (freq[i].second > freq[j].second) {
-                swap(freq[i], freq[j]);
-            }
+    PriorityQueue pq;
+    for (int i = 0; i < 256; ++i) {
+        if (freq[i] > 0) {
+            pq.enqueue(new Node((char)i, freq[i]));
         }
     }
 
-    vector<Node*> nodes;
-    for (const auto& p : freq) {
-        nodes.push_back(new Node(p.first, p.second));
-    }
+    while (!pq.isEmpty()) {
+        Node* left = pq.dequeue();
+        if (pq.isEmpty()) {
+            root = left;
+            break;
+        }
+        Node* right = pq.dequeue();
 
-    while (nodes.size() > 1) {
-        Node* left = nodes[0];
-        Node* right = nodes[1];
-        nodes.erase(nodes.begin());
-        nodes.erase(nodes.begin());
         Node* merged = new Node('\0', left->freq + right->freq);
         merged->left = left;
         merged->right = right;
-        nodes.push_back(merged);
-
-        for (size_t i = 0; i < nodes.size(); ++i) {
-            for (size_t j = i + 1; j < nodes.size(); ++j) {
-                if (nodes[i]->freq > nodes[j]->freq) {
-                    swap(nodes[i], nodes[j]);
-                }
-            }
-        }
+        pq.enqueue(merged);
     }
-
-    root = nodes[0];
-    generateCodes(root, "");
 }
 
-void MyHuffman::generateCodes(Node* node, string str) {
+void MyHuffman::generateCodes(Node* node, string str, string codes[]) {
     if (!node) return;
+
     if (!node->left && !node->right) {
-        charCodes.push_back({node->character, str});
+        codes[(unsigned char)node->character] = str;
         return;
     }
-    generateCodes(node->left, str + "0");
-    generateCodes(node->right, str + "1");
+
+    generateCodes(node->left, str + "0", codes);
+    generateCodes(node->right, str + "1", codes);
 }
 
 void MyHuffman::serializeTree(Node* node, string& serializedTree) {
@@ -126,44 +156,54 @@ Node* MyHuffman::deserializeTree(const string& serializedTree, int& index) {
 
 void MyHuffman::encodeSentence(const string& input) {
     buildTree(input);
-    string encodedSentence;
+
+    string codes[256];
+    generateCodes(root, "", codes);
+
+    encodedData.clear();
     for (char c : input) {
-        for (const auto& p : charCodes) {
-            if (p.first == c) {
-                encodedSentence += p.second;
-                break;
-            }
+        encodedData += codes[(unsigned char)c];
+    }
+
+    cout << "The sentence is: " << input << endl;
+    cout << "\nChar      Frequency     Code" << endl;
+    for (int i = 0; i < 256; ++i) {
+        if (!codes[i].empty()) {
+            cout << (char)i << "        |           " << codes[i] << endl;
         }
     }
 
+    cout << "\nEncoded data: " << encodedData << endl;
+
     string serializedTree;
     serializeTree(root, serializedTree);
+
     ofstream treeFile("HuffmanTree.txt");
-    if (!treeFile) {
+    if (treeFile.is_open()) {
+        treeFile << serializedTree;
+        treeFile.close();
+    } else {
         cerr << "Error: Could not open tree file for writing!" << endl;
         return;
     }
-    treeFile << serializedTree;
-    treeFile.close();
 
     ofstream encodedFile("HuffmanEncoded.bin", ios::binary);
-    if (!encodedFile) {
+    if (encodedFile.is_open()) {
+        int validBits = encodedData.size();
+        encodedFile.write(reinterpret_cast<char*>(&validBits), sizeof(validBits));
+        for (size_t i = 0; i < encodedData.size(); i += 8) {
+            string byteStr = encodedData.substr(i, 8);
+            while (byteStr.size() < 8) byteStr += "0";
+            unsigned char byte = static_cast<unsigned char>(stoi(byteStr, NULL, 2));
+            encodedFile.write(reinterpret_cast<char*>(&byte), sizeof(byte));
+        }
+        encodedFile.close();
+    } else {
         cerr << "Error: Could not open binary file for writing!" << endl;
         return;
     }
 
-    int validBits = encodedSentence.size();
-    encodedFile.write(reinterpret_cast<char*>(&validBits), sizeof(validBits));
-    for (size_t i = 0; i < encodedSentence.size(); i += 8) {
-        string byteStr = encodedSentence.substr(i, 8);
-        while (byteStr.size() < 8) byteStr += "0";
-        unsigned char byte = static_cast<unsigned char>(stoi(byteStr, nullptr, 2));
-        encodedFile.write(reinterpret_cast<char*>(&byte), sizeof(byte));
-    }
-    encodedFile.close();
-
-    cout << "Serialized tree saved to HuffmanTree.txt" << endl;
-    cout << "Encoded data saved to HuffmanEncoded.bin" << endl;
+    cout << "Data saved to HuffmanEncoded.bin" << endl;
 }
 
 void MyHuffman::decodeSentence() {
